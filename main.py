@@ -70,9 +70,29 @@ def modulate(brightness=100.0, saturation=100.0, hue=100.0, fpath="", fname="mon
             i.save(filename=fpath + fname)
             print('ok')
 
+def rotate(deg=90,fpath="", fname="mona-lisa.png", dirname="rotate to {} deg"):
+    fpath = testpath(fpath)
 
+    try:
+        dirname = dirname.format(deg,fname)
+    except Exception as e:
+        print("Чёт не форматит\n", e)
+    deg *= -1
+    with Image(filename=fpath + fname) as img:
+        print(img.metadata)
+
+        if not (dirname) in os.listdir(fpath):
+            fpath = fpath + dirname + "\\"
+            os.mkdir(fpath)
+        else:
+            fpath = fpath + dirname + "\\"
+
+        with img.clone() as i:
+            i.rotate(deg)
+            i.save(filename=fpath + fname)
+            print('ok')
 if __name__ == '__main__':
     s = input("path: ")
     for im in os.listdir(s):
         if im.split(".")[-1] in ["png", "jpg", "bmp"]:
-            modulate(fpath=s, fname=im,saturation=30)
+            rotate(fpath=s,fname=im,deg=90)
